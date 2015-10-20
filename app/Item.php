@@ -9,8 +9,21 @@ class Item extends Model {
 	/**
 	 * An item belongs to a podcast
 	 */
-	 public function podcast()
-	 {
+	 public function podcast() {
         return $this->belongsTo('App\Podcast');
      }
+
+     /**
+	 * An item belongs to a category
+	 */
+     public function category() {
+     	return $this->belongsTo('App\Categories');
+     }
+
+     /**
+	 * Items has many tags
+	 */
+	public function tags() {
+		return $this->belongsToMany('App\Tags', 'items_tags', 'item_id', 'tag_id');
+	}
 }

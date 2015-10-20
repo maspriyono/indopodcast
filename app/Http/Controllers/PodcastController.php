@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Item;
 use App\Podcast;
+use App\Categories;
 use Auth;
 use DB;
 use Feeds;
@@ -110,7 +111,6 @@ class PodcastController extends Controller {
                     }
 
                     // @todo Podcast was added
-                    echo "hai";
                     return redirect('podcast/player');
                 } else {
                     // @todo flash msg
@@ -168,6 +168,39 @@ class PodcastController extends Controller {
         );
 
         return view('podcasts.favorites', $data);
+    }
+
+    /**
+     * Open a page to manage category of each item
+     */
+    public function manageCategories() {
+        return view('podcasts.manage_categories', array(
+            'models' => Item::all(),
+            'categories' => Categories::all()
+        ));
+    }
+
+    /**
+     * Action of adding new category
+     */
+    public function addCategory(Request $request) {
+        $newCat = Categories::create([
+            'name' => Request::input('new-category')
+        ]);
+
+        if ($newCat) {
+            return $this->manageCategories();
+        } else {
+            echo 'something went wrong :(';exit;
+        }
+    }
+
+    /**
+     * Assign a category to item
+     */
+    public function assignCategory() {
+        print_r(request::get('data'));
+        echo request::get('data')->item_id;exit;
     }
 
 }

@@ -13,12 +13,16 @@
 
 Route::get('/', 'PodcastController@index');
 
-Route::get('podcast/player', 'PodcastController@index');
-Route::get('podcast/manage', 'PodcastController@manage');
-Route::get('podcast/favorites', 'PodcastController@favorites');
-Route::get('podcast/settings', 'PodcastController@settings');
-Route::post('podcast/add', 'PodcastController@add');
-Route::post('podcast/delete', 'PodcastController@delete');
+Route::group(['prefix' => 'podcast'], function() {
+	Route::get('player', 'PodcastController@index');
+	Route::get('manage', 'PodcastController@manage');
+	Route::get('manage_categories', 'PodcastController@manageCategories');
+	Route::get('favorites', 'PodcastController@favorites');
+	Route::get('settings', 'PodcastController@settings');
+	Route::post('add', 'PodcastController@add');
+	Route::post('add_category', 'PodcastController@addCategory');
+	Route::post('delete', 'PodcastController@delete');
+});
 
 Route::get('podcast/auto-update', function () {
 	$exitCode = \Artisan::call('updatePodcastItems');

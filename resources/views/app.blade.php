@@ -35,6 +35,7 @@
 				<ul class="nav navbar-nav">
 					@if (Auth::check())
 						<li><a href="{{ url('/podcast/manage') }}">Manage Feeds</a></li>
+						<li><a href="{{ url('/podcast/manage_categories') }}">Manage Categories</a></li>
 						<li><a href="{{ url('/podcast/favorites') }}">Favorites</a></li>
 						<li><a href="{{ url('/podcast/player') }}">Listen</a></li>
 						{!! Form::open(['url' => '/item/search', 'method' => 'get', 'class' => 'navbar-form navbar-left', 'role' => 'search']) !!}
