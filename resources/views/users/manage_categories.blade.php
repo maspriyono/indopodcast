@@ -4,23 +4,9 @@
 <div class="container main container-podcast-manage">
     
     <div class="row">
-        <div class="col-md-3">
-            <h3 class="page-title">Manage Podcast Feeds</h3>
+        <div class="col-md-12">
+            <h3 class="page-title">Manage Categories Preferences</h3>
         </div>
-        
-        <div class="col-md-9">
-            {!! Form::model($podcast = new \App\Podcast, ['method' =>'POST','action' => ['PodcastController@add']]) !!}
-                <div class="form-group">
-                    <div class="col-md-10">
-                        {!! Form::text('feed_url', null, 
-                    ['class' => 'form-control','required','placeholder' => 'Enter a Podcast Feed Url here: http://example.com/feed']) !!}
-                    </div>
-                    <div class="col-md-2">
-                        {!! Form::submit('Add Feed', ['class' => 'btn btn-primary']) !!}
-                    </div>
-                </div>
-            {!! Form::close() !!}
-        </div> 
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -28,29 +14,33 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <td>Title</td>
-                            <td>URL</td>
+                            <td>Username</td>
+                            <td>Email</td>
                             <td>Category</td>
-                            <td>Tags</td>
+                            <td>Actions</td>
                         </tr>
                     </thead>
-                @foreach($models as $cast)
+                @foreach($models as $item)
                     <tr>
-                        <td>{{ $cast->title }}</td>
-                        <td>{{ $cast->url }}</td>
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->email }}</td>
+                        @if (sizeOf($item->categories) > 0)
                         <td>
-                            {{ $cast->category ? $cast->category->name : '-' }} 
-                            <a href="#" data-toggle="modal" data-target="#categories" data-id="{{ $cast->id }}" class="choosing-category"><i class="fa fa-pencil"></i></a>
-                        </td>
-                        @if (sizeOf($cast->tags) > 0)
-                        <td>
-                            @foreach ($cast->tags as $tag)
-                                {{ $tag }} 
+                            @foreach ($item->categories as $c)
+                                {{ $c->name }} 
                             @endforeach
                         @else
                             <td>-
                         @endif
-                         <i class="fa fa-pencil"></i></td>
+                            <a href="#" data-toggle="modal" data-target="#categories" data-id="{{ $item->id }}" class="choosing-category"><i class="fa fa-pencil"></i></a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                <a href="#" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                <a href="#" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </table>
@@ -84,20 +74,21 @@
         {!! Form::close() !!}
         <table class="table">
             <thead>
-                <th>No.</th>
+                <th></th>
                 <th>Name</th>
                 <th>Actions</th>
             </thead>
             <tbody>
                 @foreach ($categories as $k => $c)
                 <tr>
-                    <td>{{ $k + 1 }}</td>
+                    <td>
+                        <input type="checkbox" class="category-preference" data-id="{{ $c->id }}"/>
+                    </td>
                     <td>{{ $c->name }}</td>
                     <td>
                         <div class="btn-group">
-                            <a href="#" class="btn"><i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn"><i class="fa fa-trash"></i></a>
-                            <a href="#" class="btn checking-category" data-id="{{ $c->id }}" data-dismiss="modal"><i class="fa fa-check"></i></a>
+                            <a href="#" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-default"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -106,6 +97,7 @@
         </table>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="save">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -117,7 +109,7 @@
 @section('js-footer')
     <script>
     var item_id = -1;
-    var category_id = -1;
+    var categories = [];
 
     jQuery(document).ready(function($) {
         $('.feed-delete').on('click', function() {
@@ -141,13 +133,18 @@
             }
         });
 
-        $('.choosing-category').click(function() {
-            console.log('choosing-category');
-            item_id = $(this).attr('data-id');
+        $('.category-preference').click(function() {
+            if (this.checked) {
+                categories.push($(this).attr('data-id'));
+            } else {
+                var index = categories.indexOf($(this).attr('data-id'));
+                if (index > -1) {
+                    categories.splice(index, 1);
+                }
+            }
         });
 
-        $('.checking-category').click(function() {
-            console.log('checking-category');
+        $('#save').click(function() {
             category_id = $(this).attr('data-id');
 
             $.ajax({

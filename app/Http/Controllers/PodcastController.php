@@ -10,6 +10,7 @@ use DB;
 use Feeds;
 use File;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\RedirectResponse;
 use Image;
 use Request;
 
@@ -199,8 +200,12 @@ class PodcastController extends Controller {
      * Assign a category to item
      */
     public function assignCategory() {
-        print_r(request::get('data'));
-        echo request::get('data')->item_id;exit;
+        $request = request::get('data');
+        $item = Item::findOrFail($request['item_id']);
+        $item->category_id = $request['category_id'];
+        $item->save();
+
+        return redirect('podcast/manage_categories');
     }
 
 }

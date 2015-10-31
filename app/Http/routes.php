@@ -21,7 +21,12 @@ Route::group(['prefix' => 'podcast'], function() {
 	Route::get('settings', 'PodcastController@settings');
 	Route::post('add', 'PodcastController@add');
 	Route::post('add_category', 'PodcastController@addCategory');
+	Route::post('assign_category', 'PodcastController@assignCategory');
 	Route::post('delete', 'PodcastController@delete');
+});
+
+Route::group(['prefix' => 'user'], function() {
+	Route::get('manage_categories', 'UserController@manageCategories');
 });
 
 Route::get('podcast/auto-update', function () {

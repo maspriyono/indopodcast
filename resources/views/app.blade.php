@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Podcast</title>
 
-	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+	<link href="{{ asset('/css/css.css') }}" rel='stylesheet' type='text/css'>
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 
 	<!-- Fonts -->
@@ -38,6 +38,14 @@
 						<li><a href="{{ url('/podcast/manage_categories') }}">Manage Categories</a></li>
 						<li><a href="{{ url('/podcast/favorites') }}">Favorites</a></li>
 						<li><a href="{{ url('/podcast/player') }}">Listen</a></li>
+						<li class="dropdown">
+			                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
+			                <ul class="dropdown-menu">
+			                  	<li><a href="#">Profile</a></li>
+			                  	<li role="separator" class="divider"></li>
+			                  	<li><a href="{{ url('user/manage_categories') }}">Manage Categories</a></li>
+			                </ul>
+			            </li>
 						{!! Form::open(['url' => '/item/search', 'method' => 'get', 'class' => 'navbar-form navbar-left', 'role' => 'search']) !!}
 						    <div class="form-group">
 						        {!! Form::text('query', null, ['class' => 'form-control', 'placeholder' => 'Search ...']) !!}
@@ -66,8 +74,8 @@
 	@yield('content')
 
 	<!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="{{ asset('/js/jquery.min.js') }}"></script>
+	<script src="{{ asset('/js/bootstrap.min.js') }}"></script>
 	@yield('js-footer')
 </body>
 </html>
