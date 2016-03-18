@@ -33,7 +33,7 @@ class PodcastController extends Controller {
         $items = DB::table('items')
                         ->where('user_id', '=', Auth::user()->id)
                         ->where('is_mark_as_read', '!=', 1)
-                        ->orderBy('published_at', 'desc')->paginate(15);
+                        ->orderBy('published_at', 'desc')->paginate(9);
 
         $podcasts = DB::table('podcasts')
                 ->where('user_id', '=', Auth::user()->id)
@@ -81,7 +81,7 @@ class PodcastController extends Controller {
 
             if ($podcastName && $podcastName != '') {
                 // check if the feed's first item has an audio file in its enclosure
-                if (strpos($feed->get_items()[0]->get_enclosure()->get_type(), 'audio') !== false) {
+                if (isset($feed->get_items()[0]) && strpos($feed->get_items()[0]->get_enclosure()->get_type(), 'audio') !== false) {
                     $podcastMachineName = strtolower(preg_replace('/\s+/', '', $podcastName));
 
                     // Save the feed thumbnail to file system and save file path to database

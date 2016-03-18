@@ -8,7 +8,7 @@
 
 	<div class="container body">
 		<div class="main_container">
-			
+
 			@include('commons.sidebar')
 
 			<!-- page content -->
@@ -16,7 +16,7 @@
 					<div class="">
 						<div class="page-title">
 								<div class="title_left">
-										<h3>{{ isset($pageTitle) != null ? $pageTitle : 'Optimus' }}</h3>
+										<h3>{{ isset($pageTitle) != null ? $pageTitle : 'Podcast Indonesia' }}</h3>
 								</div>
 
 								@include('commons.search')

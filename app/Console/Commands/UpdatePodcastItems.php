@@ -26,6 +26,7 @@ class UpdatePodcastItems extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
+		$this->info('Initiating podcasts discovery...');
 		$uniquePodcasts = DB::table('podcasts')
 			->select('id', 'feed_url', 'machine_name')
 			->groupBy('machine_name')->get();
@@ -75,6 +76,6 @@ class UpdatePodcastItems extends Command {
 			}
 
 		}
-
+		$this->info('Discovery has been done successfully...');
 	}
 }
