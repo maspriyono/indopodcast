@@ -17,63 +17,73 @@
     </div>
   @endif
 
-  <div class="main container-fluid container-podcast-list">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        @if($items)
-          @foreach ($items as $item)
-            <div class="row podcast-item-row">
-              <div class="col-md-3 podcast-thumbnail-container">
-                <img class="podcast-thumbnail" width="100" height="100"
+    @if($items)
+      @foreach ($items as $item)
+        <div class="x_panel podcast-item-row">
+          <div class="col-md-55">
+            <div class="thumbnail">
+              <div class="image view view-first">
+                <img style="width: 100%; display: block;"
                   src="{{asset(App\Item::find($item->id)->podcast->feed_thumbnail_location)}}" />
-                <p><small>{{ date_format(date_create($item->published_at),'jS M Y') }}</small></p>
+                  <div class="mask">
+                      <p>Your Text</p>
+                      <div class="tools tools-bottom">
+                          <a href="#"><i class="fa fa-link"></i></a>
+                          <a href="#"><i class="fa fa-pencil"></i></a>
+                          <a href="#"><i class="fa fa-times"></i></a>
+                      </div>
+                  </div>
               </div>
-              <div class="col-md-9">
-                <h4 class="podcast-title"><small>{{App\Item::find($item->id)->podcast->name}}</small></h4>
-                <h3 class="podcast-item-title">
-                  <a target="_blank" href="{{ $item->url }}">{{ $item->title }}</a>
-                </h3>
-                <p class="podcast-item-description">{{ $item->description}}
-                    <br/>
-                    <a class="read-more" target="_blank" href="{{ $item->url }}"><small>Read More</small></a>
+              <div class="caption">
+                <p>
+                  {{ date_format(date_create($item->published_at),'jS M Y') }}
                 </p>
-                <div class="player-action-list">
-                    <ul class="list-inline">
-                        <li class="mark-as-favorite" data-src="{{$item->id}}">
-                          @if($item->is_mark_as_favorite)
-                            <img width="24" height="24" alt="favorited" src="{{asset('css/icons/ic_favorite_white_36dp.png')}}" /> <span>Favorited</span>
-                            @else
-                              <img width="24" height="24" alt="mark as favorite" src="{{asset('css/icons/ic_favorite_grey600_36dp.png')}}" /> <span>Mark as Fav</span>
-                          @endif
-                        </li>
-                        <li class="mark-all-prev-read" data-src="{{$item->id}}">
-                          <img width="24" height="24" alt="mark all as read" src="{{asset('css/icons/ic_done_all_white_36dp.png')}}" /> <span>Mark all previous as read</span>
-                        </li>
-                        <li class="mark-as-read" data-src="{{$item->id}}">
-                            <img width="24" height="24" alt="mark as read" src="{{asset('css/icons/ic_done_white_36dp.png')}}" /> <span>Mark as read</span>
-                        </li>
-                        <li class='play' data-src='{{ $item->audio_url}}'>
-                            <img width="24" height="24" alt="play" src="{{asset('css/icons/ic_play_circle_filled_white_36dp.png')}}" /> <span>Play</span>
-                        </li>
-                    </ul>
-                </div>
               </div>
             </div>
-        @endforeach
-
-        @if($items)
-          <div class="row container-fluid">
-              <?php echo $items->render()?>
           </div>
-        @endif
+          <div class="col-md-9">
+            <h4 class="podcast-title"><small>{{App\Item::find($item->id)->podcast->name}}</small></h4>
+            <h3 class="podcast-item-title">
+              <a target="_blank" href="{{ $item->url }}">{{ $item->title }}</a>
+            </h3>
+            <p class="podcast-item-description">{{ $item->description}}
+                <br/>
+                <a class="read-more" target="_blank" href="{{ $item->url }}"><small>Read More</small></a>
+            </p>
+            <div class="player-action-list">
+                <ul class="list-inline">
+                    <li class="mark-as-favorite" data-src="{{$item->id}}">
+                      @if($item->is_mark_as_favorite)
+                        <img width="24" height="24" alt="favorited" src="{{asset('css/icons/ic_favorite_white_36dp.png')}}" /> <span>Favorited</span>
+                        @else
+                          <img width="24" height="24" alt="mark as favorite" src="{{asset('css/icons/ic_favorite_grey600_36dp.png')}}" /> <span>Mark as Fav</span>
+                      @endif
+                    </li>
+                    <li class="mark-all-prev-read" data-src="{{$item->id}}">
+                      <img width="24" height="24" alt="mark all as read" src="{{asset('css/icons/ic_done_all_white_36dp.png')}}" /> <span>Mark all previous as read</span>
+                    </li>
+                    <li class="mark-as-read" data-src="{{$item->id}}">
+                        <img width="24" height="24" alt="mark as read" src="{{asset('css/icons/ic_done_white_36dp.png')}}" /> <span>Mark as read</span>
+                    </li>
+                    <li class='play' data-src='{{ $item->audio_url}}'>
+                        <img width="24" height="24" alt="play" src="{{asset('css/icons/ic_play_circle_filled_white_36dp.png')}}" /> <span>Play</span>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    @endforeach
 
-        @else
-          <p class="text-white">Please <a href="{{ url('/podcast/manage') }}">add a feed</a> to view podcasts here...</p>
-      @endif
-    </div>
-    <div class="col-md-2">
-    </div>
-  </div>
+    @if($items)
+      <div class="row container-fluid">
+          <?php echo $items->render()?>
+      </div>
+    @endif
+
+    @else
+      <p class="text-white">Please <a href="{{ url('/podcast/manage') }}">add a feed</a> to view podcasts here...</p>
+  @endif
+
   @section('js-footer')
     <script>
     jQuery(document).ready(function($) {

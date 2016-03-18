@@ -27,8 +27,10 @@ Route::group(['prefix' => 'podcast'], function() {
 
 Route::group(['prefix' => 'user'], function() {
 	Route::get('manage_categories', 'UserController@manageCategories');
+	Route::get('logout', 'UserController@logout');
 });
 
+Route::get('landing', 'UserController@landing');
 Route::get('podcast/auto-update', function () {
 	$exitCode = \Artisan::call('updatePodcastItems');
 	if ($exitCode == 0) {

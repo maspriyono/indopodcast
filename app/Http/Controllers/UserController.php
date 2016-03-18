@@ -94,4 +94,13 @@ class UserController extends Controller {
 		]);
 	}
 
+	public function logout() {
+		\Auth::logout();
+    \Session::flush();
+    return \Redirect::to('/');
+	}
+
+	public function landing() {
+    return view('landing.index');
+	}
 }
