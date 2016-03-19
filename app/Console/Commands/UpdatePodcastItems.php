@@ -37,13 +37,16 @@ class UpdatePodcastItems extends Command {
 				->where('machine_name', '=', $podcast->machine_name)
 				->get();
 			$this->info('checking: ' . $podcast->feed_url);
+			try {
 			$items = Feeds::make($podcast->feed_url)->get_items();
+			$this->info('1');
 
 			// Calculate 48 hours ago
 			$yesterday = time() - (24 * 2 * 60 * 60);
 			$j = 0;
 
 			foreach ($items as $item) {
+				$this->info('itm pub date: ' . $item->get_date());
 				$itemPubDate = $item->get_date();
 
 				if ($item->get_date('U') > $yesterday) {
@@ -71,6 +74,7 @@ class UpdatePodcastItems extends Command {
 							]);
 
 							$j++;
+							$i++;
 						}
 					}
 				} else {
@@ -80,6 +84,9 @@ class UpdatePodcastItems extends Command {
 				$this->info('added new ' . $j . ' items');
 			}
 			$this->info('total ' . $i . ' items addition');
+			} catch (\Exception $e) {
+				$this->error($e);	
+			}
 		}
 		$this->info('Discovery has been done successfully...');
 	}
