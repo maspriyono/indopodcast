@@ -30,17 +30,18 @@ class UpdatePodcastItems extends Command {
 		$uniquePodcasts = DB::table('podcasts')
 			->select('id', 'feed_url', 'machine_name')
 			->groupBy('machine_name')->get();
-
+		$i = 0;
 		foreach ($uniquePodcasts as $podcast) {
 			$usersSubscribedToThisPodcast = DB::table('podcasts')
 				->select('user_id', 'id as podcast_id')
 				->where('machine_name', '=', $podcast->machine_name)
 				->get();
-
+			$this->info('checking: ' . $podcast->feed_url);
 			$items = Feeds::make($podcast->feed_url)->get_items();
 
 			// Calculate 48 hours ago
 			$yesterday = time() - (24 * 2 * 60 * 60);
+			$j = 0;
 
 			foreach ($items as $item) {
 				$itemPubDate = $item->get_date();
@@ -68,13 +69,17 @@ class UpdatePodcastItems extends Command {
 								'audio_url' => $item->get_enclosure()->get_link(),
 								'podcast_id' => $subscriber->podcast_id,
 							]);
+
+							$j++;
 						}
 					}
 				} else {
 					break;
 				}
-			}
 
+				$this->info('added new ' . $j . ' items');
+			}
+			$this->info('total ' . $i . ' items addition');
 		}
 		$this->info('Discovery has been done successfully...');
 	}
